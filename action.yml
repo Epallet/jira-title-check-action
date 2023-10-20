@@ -1,0 +1,31 @@
+name: "title-verifier"
+description: |2
+  Original from https://github.com/Mustafakhn/pr-title-verifier-action/blob/main/action.yml
+  this action checks the pr title to contain a specific code like [TEST-123] at the beginning for tools like jira and more"
+author: Miguel Pinilla
+branding:
+  icon: check
+  color: 'blue'
+
+outputs:
+  output-results:
+    description: "results of health check"
+    value: ${{ steps.test-pr.outputs.output-result || steps.test-push.outputs.output-result }}
+runs:
+  using: "composite"
+  steps:
+    - name: env-pr
+      if: ${{ github.event_name == 'pull_request' }}
+      run: |
+          echo "TITLE_ENV=$(echo ${{ github.event.pull_request.title }} | cut -d ' ' -f 1)"  >> $GITHUB_ENV
+      shell: bash
+    - name: env-push
+      if: ${{ github.event_name == 'push' }}
+      run: |
+          echo "TITLE_ENV=$(echo ${{ github.event.head_commit }} | cut -d ' ' -f 1)"  >> $GITHUB_ENV
+      shell: bash
+    - name: test
+      run: |
+          sudo chmod u+x $GITHUB_ACTION_PATH/title-verifier.sh
+          $GITHUB_ACTION_PATH/title-verifier.sh $TITLE_ENV
+      shell: bash
