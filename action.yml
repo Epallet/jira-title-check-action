@@ -16,13 +16,17 @@ runs:
   steps:
     - name: env-pr
       if: ${{ github.event_name == 'pull_request' }}
+      env:
+         T_VAR: ${{ github.event.pull_request.title }} 
       run: |
-          echo "TITLE_ENV=$(echo ${{ github.event.pull_request.title }} | cut -d ' ' -f 1)"  >> $GITHUB_ENV
+          echo "TITLE_ENV=$(echo $T_VAR | cut -d ' ' -f 1)"  >> $GITHUB_ENV
       shell: bash
     - name: env-push
       if: ${{ github.event_name == 'push' }}
+      env:
+         T_VAR: ${{ github.event.head_commit }} 
       run: |
-          echo "TITLE_ENV=$(echo ${{ github.event.head_commit }} | cut -d ' ' -f 1)"  >> $GITHUB_ENV
+          echo "TITLE_ENV=$(echo $T_VAR | cut -d ' ' -f 1)"  >> $GITHUB_ENV
       shell: bash
     - name: test
       run: |
