@@ -26,6 +26,7 @@ runs:
       shell: bash
     - name: test
       run: |
-          sudo chmod u+x $GITHUB_ACTION_PATH/title-verifier.sh
-          $GITHUB_ACTION_PATH/title-verifier.sh $TITLE_ENV
+          echo "Verifying $TITLE_ENV"
+          sudo chmod u+x $GITHUB_ACTION_PATH/title_verify.sh
+          $GITHUB_ACTION_PATH/title_verify.sh $TITLE_ENV
       shell: bash
