@@ -24,7 +24,7 @@ runs:
     - name: env-push
       if: ${{ github.event_name == 'push' }}
       env:
-         T_VAR: ${{ github.event.head_commit }} 
+         T_VAR: ${{ github.event.head_commit.message }} 
       run: |
           echo "TITLE_ENV=$(echo $T_VAR | cut -d ' ' -f 1)"  >> $GITHUB_ENV
       shell: bash
